@@ -1,0 +1,18 @@
+services:
+  deepface-api:
+    build: .
+    container_name: deepface-api
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./output:/app/output
+    restart: always
+    environment:
+      - TF_CPP_MIN_LOG_LEVEL=2
+      - PYTHONUNBUFFERED=1
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G

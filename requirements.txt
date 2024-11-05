@@ -1,0 +1,20 @@
+# 按照安装顺序排列依赖
+typing-extensions>=3.6.6,<4.6.0
+
+# 基础依赖
+numpy>=1.22.0
+h5py>=3.8.0
+
+# 深度学习框架 (先安装这部分)
+tensorflow==2.13.0
+keras>=2.13.0
+
+# Web 框架
+fastapi>=0.95.0,<0.100.0
+uvicorn>=0.22.0,<0.23.0
+python-multipart==0.0.6
+
+# 计算机视觉
+opencv-python==4.8.1.78
+deepface==0.0.89
+retina-face==0.0.13
