@@ -6,9 +6,7 @@ This is a simple project to detect human faces in an image using deepface and fa
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker)
 
-## Introduction
-
-![hero-image](./examples/example.jpg)
+![hero-image](./examples/image1.jpg)
 
 ## Reference
 
@@ -61,7 +59,9 @@ curl --location 'http://127.0.0.1:8008/detect_and_return' \
 
 #### Response
 
-The response will be a image file with faces detected.
+The response will return a image file with faces detected.
+
+![example-image-2](./examples/image2.jpg)
 
 ### Detect Image and return json
 

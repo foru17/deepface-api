@@ -247,7 +247,7 @@ async def detect(
 
 
 @app.post("/detect_and_return")
-async def detect_and_return(file: UploadFile = File(...)):
+async def detect_and_return(file: UploadFile = File(...), info_display: Optional[bool] = Query(default=False)):
     try:
         # 读取图片
         contents = await file.read()
@@ -274,10 +274,40 @@ async def detect_and_return(file: UploadFile = File(...)):
                     'w': int(face_data['facial_area'][2] - face_data['facial_area'][0]),
                     'h': int(face_data['facial_area'][3] - face_data['facial_area'][1])
                 }
-                face_list.append({
+
+                face_info = {
                     'facial_area': facial_area,
                     'score': float(face_data['score']) if 'score' in face_data else None
-                })
+                }
+
+                # 如果需要显示详细信息，则进行 DeepFace 分析
+                if info_display:
+                    try:
+                        face_img = img[
+                            facial_area['y']:facial_area['y']+facial_area['h'],
+                            facial_area['x']:facial_area['x']+facial_area['w']
+                        ]
+
+                        analysis = DeepFace.analyze(
+                            face_img,
+                            actions=['age', 'gender', 'emotion'],
+                            enforce_detection=False
+                        )
+
+                        if isinstance(analysis, list):
+                            analysis = analysis[0]
+
+                        gender = "Woman" if analysis['gender']['Woman'] > 50 else "Man"
+
+                        face_info.update({
+                            'age': int(analysis['age']),
+                            'gender': gender,
+                            'dominant_emotion': str(analysis['dominant_emotion'])
+                        })
+                    except Exception as e:
+                        print(f"Face analysis failed: {str(e)}")
+
+                face_list.append(face_info)
 
         # 在图片上绘制检测结果
         img_result = draw_detections_with_info(img, face_list)
