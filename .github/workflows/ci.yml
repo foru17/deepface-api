@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint & type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install lint deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff black mypy
+
+      - name: Ruff
+        run: ruff check src tests
+
+      - name: Black --check
+        run: black --check src tests
+
+      - name: Mypy (advisory)
+        run: mypy src/deepface_api || true
+
+  test:
+    name: Tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install lightweight runtime + test deps
+        # We intentionally avoid installing TensorFlow / DeepFace / RetinaFace
+        # in CI — they're heavy and not needed for the mocked unit suite.
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            "fastapi>=0.110" "uvicorn[standard]>=0.27" python-multipart \
+            "pydantic>=2.6" "pydantic-settings>=2.2" \
+            "numpy>=1.24" opencv-python-headless \
+            pytest pytest-asyncio pytest-cov httpx
+
+      - name: Run pytest with coverage
+        env:
+          PYTHONPATH: src
+        run: pytest --cov=deepface_api --cov-report=xml --cov-report=term
+
+      - name: Upload coverage to Codecov
+        if: matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false
+        continue-on-error: true
+
+  build-package:
+    name: Build sdist + wheel
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7

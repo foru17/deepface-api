@@ -1,0 +1,30 @@
+version: 2
+
+updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      production-deps:
+        patterns: ["*"]
+        exclude-patterns: ["pytest*", "ruff", "black", "mypy", "pre-commit"]
+      dev-deps:
+        patterns: ["pytest*", "ruff", "black", "mypy", "pre-commit"]
+    labels: ["dependencies", "python"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    labels: ["dependencies", "ci"]
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    labels: ["dependencies", "docker"]

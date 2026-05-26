@@ -1,0 +1,69 @@
+name: Bug Report
+description: Report a defect in deepface-api
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report! Please make sure
+        the issue hasn't already been reported.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, requests, or scripts that reproduce the issue.
+      placeholder: |
+        1. Start the API with `docker compose up`
+        2. POST /analyze with file …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior (with logs / traces)
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: deepface-api version
+      placeholder: "e.g. 2.0.0 or git sha"
+    validations:
+      required: true
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Deployment
+      options:
+        - Docker (CPU)
+        - Docker (GPU)
+        - Bare-metal / venv
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "e.g. 3.11.9"
+  - type: input
+    id: os
+    attributes:
+      label: OS / Architecture
+      placeholder: "e.g. Ubuntu 22.04 (amd64), macOS 14.5 (arm64)"
