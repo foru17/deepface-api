@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-05-27
+
+Patch release covering CI / Docker build fixes uncovered by the v2.0.0
+publish run, plus the first batch of Dependabot bumps. No HTTP API or
+Python API surface changes.
+
+### Fixed
+
+- **GPU image build**: install Python deps into a `/opt/venv` venv via
+  `ensurepip` instead of using the apt `python3-pip`. The system pip
+  pre-installed `blinker 1.4` as a distutils package, which Flask (a
+  transitive dep of deepface) couldn't uninstall, breaking the
+  multi-stage `pip install`.
+- **`release.yml`** dropped the `orhun/git-cliff-action@v3` step; its
+  container image was failing to pull in CI and `continue-on-error`
+  doesn't apply at action-setup time, so the whole job aborted before
+  the release was published. Now relies on
+  `softprops/action-gh-release`'s built-in `generate_release_notes`.
+- **`ci.yml`** replaced `black --check` with `ruff format --check`.
+  `black` running on Python 3.11 against code targeting py3.12 was
+  triggering its AST-safety check on the CI runner.
+
+### Changed
+
+- `release.yml` accepts a `workflow_dispatch` event with a `tag` input
+  so a failed release can be re-run against an existing tag without
+  moving the tag.
+
+### Build / dependency bumps
+
+- `docker/setup-buildx-action` 3 → 4 (#1)
+- `docker/login-action` 3 → 4 (#2)
+- `docker/metadata-action` 5 → 6 (#3)
+- `actions/upload-artifact` 4 → 7 (#4)
+- `softprops/action-gh-release` 2 → 3 (#5)
+- `tensorflow-macos` upper bound 2.16 → 2.17 (#6)
+
 ## [2.0.0] - 2026-05-27
 
 A full rewrite of the project as a production-ready open-source FastAPI
