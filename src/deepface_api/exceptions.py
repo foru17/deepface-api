@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .logging import logger
 
@@ -51,9 +52,21 @@ def register_exception_handlers(app: FastAPI) -> None:
             ),
         )
 
-    @app.exception_handler(HTTPException)
-    async def _handle_http_exception(request: Request, exc: HTTPException) -> JSONResponse:
-        code = "http_error" if exc.status_code < 500 else "internal_error"
+    # Register against the Starlette base so this also catches FastAPI's
+    # HTTPException (subclass) *and* router-level 404 / 405 raised by
+    # Starlette itself.
+    @app.exception_handler(StarletteHTTPException)
+    async def _handle_http_exception(
+        request: Request, exc: StarletteHTTPException
+    ) -> JSONResponse:
+        if exc.status_code == 404:
+            code = "not_found"
+        elif exc.status_code == 405:
+            code = "method_not_allowed"
+        elif exc.status_code < 500:
+            code = "http_error"
+        else:
+            code = "internal_error"
         return JSONResponse(
             status_code=exc.status_code,
             content=_error_payload(

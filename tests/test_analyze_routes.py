@@ -71,6 +71,23 @@ def test_detect_and_return_lightweight_overlay(client, mock_vision, upload_paylo
     assert response.headers["X-Detection-Status"] == "success"
 
 
+def test_unknown_route_returns_error_envelope(client) -> None:
+    response = client.get("/this-route-does-not-exist")
+    assert response.status_code == 404
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["code"] == "not_found"
+    assert body["request_id"]
+
+
+def test_method_not_allowed_returns_error_envelope(client) -> None:
+    response = client.put("/health")
+    assert response.status_code == 405
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["code"] == "method_not_allowed"
+
+
 def test_openapi_schema_is_served(client) -> None:
     response = client.get("/openapi.json")
     assert response.status_code == 200
