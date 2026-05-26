@@ -62,11 +62,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DEEPFACE_BUILD_SHA=${BUILD_SHA} \
     DEEPFACE_BUILD_TIME=${BUILD_TIME}
 
-# Minimal runtime libs for opencv (headless wheel still needs libgomp + libGL deps).
+# Runtime libs needed by opencv + h5py. We declare opencv-python-headless
+# in requirements.txt, but deepface transitively pulls in opencv-python
+# (the GUI variant). libgl1 satisfies that variant's libGL.so.1 dep and
+# keeps the image robust regardless of which wheel ends up on disk.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
         libgomp1 \
+        libgl1 \
         libglib2.0-0 \
         libsm6 \
         libxext6 \
