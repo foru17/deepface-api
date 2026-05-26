@@ -56,9 +56,7 @@ def register_exception_handlers(app: FastAPI) -> None:
     # HTTPException (subclass) *and* router-level 404 / 405 raised by
     # Starlette itself.
     @app.exception_handler(StarletteHTTPException)
-    async def _handle_http_exception(
-        request: Request, exc: StarletteHTTPException
-    ) -> JSONResponse:
+    async def _handle_http_exception(request: Request, exc: StarletteHTTPException) -> JSONResponse:
         if exc.status_code == 404:
             code = "not_found"
         elif exc.status_code == 405:

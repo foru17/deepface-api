@@ -14,7 +14,9 @@ from deepface_api.services.uploads import read_and_decode_upload
 def _make_upload(
     content: bytes, content_type: str = "image/jpeg", name: str = "x.jpg"
 ) -> UploadFile:
-    return UploadFile(filename=name, file=io.BytesIO(content), headers={"content-type": content_type})  # type: ignore[arg-type]
+    return UploadFile(
+        filename=name, file=io.BytesIO(content), headers={"content-type": content_type}
+    )  # type: ignore[arg-type]
 
 
 async def test_rejects_non_image_content_type() -> None:

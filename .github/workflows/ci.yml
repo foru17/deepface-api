@@ -29,13 +29,15 @@ jobs:
       - name: Install lint deps
         run: |
           python -m pip install --upgrade pip
-          pip install ruff black mypy
+          pip install "ruff>=0.6" mypy
 
-      - name: Ruff
+      - name: Ruff (lint)
         run: ruff check src tests
 
-      - name: Black --check
-        run: black --check src tests
+      - name: Ruff (format check)
+        # ruff format is wire-compatible with black; we use it everywhere
+        # (pre-commit + CI) so contributors don't need both tools locally.
+        run: ruff format --check src tests
 
       - name: Mypy (advisory)
         run: mypy src/deepface_api || true
