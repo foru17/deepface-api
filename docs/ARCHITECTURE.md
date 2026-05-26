@@ -129,6 +129,15 @@ scale horizontally.
 A GPU variant (`Dockerfile.gpu`) uses an `nvidia/cuda:*-cudnn9-runtime`
 base instead.
 
+### Keras 2 compatibility for ML deps
+
+`retinaface` and `deepface` still target the Keras 2 API. TensorFlow
+2.16 switched to Keras 3 by default, so on those versions we install
+`tf-keras` (the Keras 2 compatibility package) as a regular runtime
+dependency. The legacy Apple-Silicon `tensorflow-macos` wheel stays on
+TF 2.15 / Keras 2 and doesn't need it. This is wired up in
+`pyproject.toml` and `requirements.txt` via environment markers.
+
 ## Testing strategy
 
 - **Unit tests** mock `detect_faces` / `analyze_single_face` so the

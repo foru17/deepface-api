@@ -14,5 +14,7 @@ numpy>=1.24,<3
 opencv-python-headless>=4.8,<5
 deepface>=0.0.93,<0.1
 retina-face>=0.0.14,<0.1
-tensorflow>=2.13,<2.18; platform_machine != 'arm64' or sys_platform != 'darwin'
+tensorflow>=2.13,<3; platform_machine != 'arm64' or sys_platform != 'darwin'
 tensorflow-macos>=2.13,<2.16; platform_machine == 'arm64' and sys_platform == 'darwin'
+# Keras 2 compatibility for retinaface / deepface on TF >= 2.16.
+tf-keras>=2.16; platform_machine != 'arm64' or sys_platform != 'darwin'
