@@ -7,7 +7,7 @@ They are aligned by convention but evolve at different cadences.
 |---|---|---|---|
 | **Package version** | `src/deepface_api/_version.py` | `MAJOR.MINOR.PATCH` (SemVer) | Maintainers cutting a release |
 | **HTTP API contract version** | URL prefix `/api/vN` + `X-API-Version` header + `API_VERSION` constant in `api/v1/__init__.py` | A single integer (`1`, `2`, …) | Only when introducing a breaking HTTP contract change |
-| **Docker image tag** | `ghcr.io/lloydzhou/deepface-api` | Derived from package version (`{version}`, `{major}.{minor}`, `{major}`, `latest`, `sha-xxxxxxx`) | Automated by `.github/workflows/docker.yml` on tag push |
+| **Docker image tag** | `ghcr.io/foru17/deepface-api` | Derived from package version (`{version}`, `{major}.{minor}`, `{major}`, `latest`, `sha-xxxxxxx`) | Automated by `.github/workflows/docker.yml` on tag push |
 
 You can introspect the running build at any time:
 
@@ -129,7 +129,7 @@ For pre-releases (`v2.1.0-rc.1`), the workflows still publish, but the
 | `2.1.0-gpu`, `latest-gpu` | Same policy + `-gpu` suffix | GPU runtime variant |
 
 Production deployments **should pin to at least `MAJOR.MINOR`** (e.g.
-`ghcr.io/lloydzhou/deepface-api:2.1`) so they pick up patch updates
+`ghcr.io/foru17/deepface-api:2.1`) so they pick up patch updates
 automatically but never silently consume breaking changes.
 
 ## Pinning Python dependents

@@ -1,10 +1,10 @@
 # deepface-api
 
-[![CI](https://github.com/lloydzhou/deepface-api/actions/workflows/ci.yml/badge.svg)](https://github.com/lloydzhou/deepface-api/actions/workflows/ci.yml)
-[![Docker](https://github.com/lloydzhou/deepface-api/actions/workflows/docker.yml/badge.svg)](https://github.com/lloydzhou/deepface-api/actions/workflows/docker.yml)
+[![CI](https://github.com/foru17/deepface-api/actions/workflows/ci.yml/badge.svg)](https://github.com/foru17/deepface-api/actions/workflows/ci.yml)
+[![Docker](https://github.com/foru17/deepface-api/actions/workflows/docker.yml/badge.svg)](https://github.com/foru17/deepface-api/actions/workflows/docker.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3670A0?logo=python&logoColor=ffdd54)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Image](https://img.shields.io/badge/image-ghcr.io%2Flloydzhou%2Fdeepface--api-2496ED?logo=docker)](https://github.com/lloydzhou/deepface-api/pkgs/container/deepface-api)
+[![Image](https://img.shields.io/badge/image-ghcr.io%2Fforu17%2Fdeepface--api-2496ED?logo=docker)](https://github.com/foru17/deepface-api/pkgs/container/deepface-api)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -66,14 +66,14 @@ The API will be available at <http://127.0.0.1:8008>.
 ```bash
 docker run -d --name deepface-api -p 8008:8008 \
   -v "$PWD/output:/data/output" \
-  ghcr.io/lloydzhou/deepface-api:latest
+  ghcr.io/foru17/deepface-api:latest
 ```
 
 GPU (requires the NVIDIA Container Toolkit on the host):
 
 ```bash
 docker run -d --gpus all -p 8008:8008 \
-  ghcr.io/lloydzhou/deepface-api:latest-gpu
+  ghcr.io/foru17/deepface-api:latest-gpu
 ```
 
 ### Run from source
@@ -264,7 +264,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full contributor guide.
 
 ## Deployment
 
-- 🐳 Container image: `ghcr.io/lloydzhou/deepface-api`
+- 🐳 Container image: `ghcr.io/foru17/deepface-api`
 - ☸️  Kubernetes / Compose examples: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
 - 🩺 Healthchecks: `GET /health` (liveness) and `GET /api/v1/ready` (readiness)
 - 📈 Structured logs: set `DEEPFACE_LOG_JSON=true` to emit JSON lines.

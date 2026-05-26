@@ -19,7 +19,7 @@ By participating you agree to abide by our
 ## Development setup
 
 ```bash
-git clone https://github.com/lloydzhou/deepface-api.git
+git clone https://github.com/foru17/deepface-api.git
 cd deepface-api
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install --upgrade pip

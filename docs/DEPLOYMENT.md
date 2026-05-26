@@ -18,7 +18,7 @@ it as a volume if you want them retained.
 ### docker compose
 
 ```bash
-git clone https://github.com/lloydzhou/deepface-api.git
+git clone https://github.com/foru17/deepface-api.git
 cd deepface-api
 cp .env.example .env
 docker compose up -d --build
@@ -40,7 +40,7 @@ docker run -d --name deepface-api \
   -v deepface-output:/data/output \
   -e DEEPFACE_MAX_UPLOAD_SIZE_MB=20 \
   -e DEEPFACE_LOG_JSON=true \
-  ghcr.io/lloydzhou/deepface-api:latest
+  ghcr.io/foru17/deepface-api:latest
 ```
 
 ## Kubernetes
@@ -62,7 +62,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/lloydzhou/deepface-api:latest
+          image: ghcr.io/foru17/deepface-api:latest
           ports:
             - containerPort: 8008
           env:

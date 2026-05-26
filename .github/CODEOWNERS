@@ -1,7 +1,7 @@
 # Default reviewer for everything.
-* @lloydzhou
+* @foru17
 
 # Workflows / packaging
-/.github/             @lloydzhou
-/Dockerfile*          @lloydzhou
-/pyproject.toml       @lloydzhou
+/.github/             @foru17
+/Dockerfile*          @foru17
+/pyproject.toml       @foru17

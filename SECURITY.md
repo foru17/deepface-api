@@ -12,7 +12,7 @@
 
 Please **do not** open a public issue for security vulnerabilities.
 
-Use [GitHub Security Advisories](https://github.com/lloydzhou/deepface-api/security/advisories/new)
+Use [GitHub Security Advisories](https://github.com/foru17/deepface-api/security/advisories/new)
 to report privately. Include:
 
 - Affected endpoint(s) or component(s)

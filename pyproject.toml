@@ -73,11 +73,11 @@ gpu = ["tensorflow[and-cuda]>=2.13,<2.18"]
 deepface-api = "deepface_api.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/lloydzhou/deepface-api"
-Documentation = "https://github.com/lloydzhou/deepface-api#readme"
-Issues = "https://github.com/lloydzhou/deepface-api/issues"
-Source = "https://github.com/lloydzhou/deepface-api"
-Changelog = "https://github.com/lloydzhou/deepface-api/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/foru17/deepface-api"
+Documentation = "https://github.com/foru17/deepface-api#readme"
+Issues = "https://github.com/foru17/deepface-api/issues"
+Source = "https://github.com/foru17/deepface-api"
+Changelog = "https://github.com/foru17/deepface-api/blob/main/CHANGELOG.md"
 
 [tool.hatch.version]
 path = "src/deepface_api/_version.py"
