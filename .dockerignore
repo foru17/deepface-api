@@ -1,0 +1,33 @@
+.git
+.github
+.gitignore
+.gitattributes
+.specstory
+.editorconfig
+
+# Tests + docs aren't needed in the runtime image
+tests
+docs
+examples
+output
+
+# Caches / venvs
+.venv
+venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.*
+
+# IDE
+.idea
+.vscode

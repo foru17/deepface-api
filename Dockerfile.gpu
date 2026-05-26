@@ -1,0 +1,62 @@
+# syntax=docker/dockerfile:1.7
+
+# GPU-enabled variant. Requires NVIDIA Container Toolkit on the host.
+# Build: docker build -f Dockerfile.gpu -t deepface-api:gpu .
+
+ARG CUDA_VERSION=12.3.2
+ARG PYTHON_VERSION=3.11
+
+FROM nvidia/cuda:${CUDA_VERSION}-cudnn9-runtime-ubuntu22.04 AS runtime
+
+ARG PYTHON_VERSION
+ARG APP_USER=appuser
+ARG APP_UID=10001
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    TF_CPP_MIN_LOG_LEVEL=2 \
+    DEEPFACE_OUTPUT_DIR=/data/output
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        software-properties-common \
+        curl \
+        gnupg \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends \
+        python${PYTHON_VERSION} \
+        python${PYTHON_VERSION}-dev \
+        python${PYTHON_VERSION}-venv \
+        python3-pip \
+        libgomp1 \
+        libglib2.0-0 \
+        libsm6 \
+        libxext6 \
+        libxrender1 \
+    && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/local/bin/python \
+    && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/local/bin/python3 \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --create-home --uid ${APP_UID} --shell /bin/bash ${APP_USER}
+
+WORKDIR /app
+
+COPY requirements.txt pyproject.toml README.md LICENSE ./
+COPY src ./src
+
+RUN python -m pip install --upgrade pip \
+    && python -m pip install --no-cache-dir -r requirements.txt \
+    && python -m pip install --no-cache-dir --no-deps . \
+    # Install CUDA-enabled TF wheel on top.
+    && python -m pip install --no-cache-dir "tensorflow[and-cuda]>=2.13,<2.18"
+
+RUN mkdir -p ${DEEPFACE_OUTPUT_DIR} && chown -R ${APP_USER}:${APP_USER} /app /data
+
+USER ${APP_USER}
+
+EXPOSE 8008
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
+    CMD curl --fail --silent http://127.0.0.1:8008/health || exit 1
+
+CMD ["deepface-api"]

@@ -1,18 +1,57 @@
+# docker compose v2 schema (no top-level `version:` key needed).
+#
+# Quick start:
+#   docker compose up -d --build
+#
+# To use the GPU variant: `docker compose --profile gpu up -d --build`
+# (requires NVIDIA Container Toolkit installed on the host).
+
 services:
   deepface-api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    image: deepface-api:latest
     container_name: deepface-api
     ports:
-      - "8008:8008"
+      - "${DEEPFACE_SERVER_PORT:-8008}:8008"
     volumes:
-      - ./output:/app/output
-    restart: always
+      - ./output:/data/output
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
     environment:
-      - TF_CPP_MIN_LOG_LEVEL=2
-      - PYTHONUNBUFFERED=1
+      DEEPFACE_OUTPUT_DIR: /data/output
+      DEEPFACE_MAX_UPLOAD_SIZE_MB: ${DEEPFACE_MAX_UPLOAD_SIZE_MB:-10}
+      DEEPFACE_LOG_LEVEL: ${DEEPFACE_LOG_LEVEL:-INFO}
+      TF_CPP_MIN_LOG_LEVEL: "2"
     deploy:
       resources:
         limits:
           memory: 4G
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8008/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  deepface-api-gpu:
+    profiles: ["gpu"]
+    extends:
+      service: deepface-api
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    image: deepface-api:gpu
+    container_name: deepface-api-gpu
+    deploy:
+      resources:
         reservations:
-          memory: 2G
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
