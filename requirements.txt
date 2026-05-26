@@ -1,20 +1,18 @@
-# 按照安装顺序排列依赖
-typing-extensions>=3.6.6,<4.6.0
+# This file is kept for users / hosting platforms that expect a flat
+# requirements.txt. The canonical dependency source is `pyproject.toml`.
+# Regenerate with: `pip install pip-tools && pip-compile pyproject.toml`.
+#
+# Runtime dependencies only — install dev / test extras via:
+#     pip install -e ".[dev,test]"
 
-# 基础依赖
-numpy>=1.22.0
-h5py>=3.8.0
-
-# 深度学习框架 (先安装这部分)
-tensorflow==2.13.0
-keras>=2.13.0
-
-# Web 框架
-fastapi>=0.95.0,<0.100.0
-uvicorn>=0.22.0,<0.23.0
-python-multipart==0.0.6
-
-# 计算机视觉
-opencv-python==4.8.1.78
-deepface==0.0.89
-retina-face==0.0.13
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.27,<1.0
+python-multipart>=0.0.9
+pydantic>=2.6,<3
+pydantic-settings>=2.2,<3
+numpy>=1.24,<3
+opencv-python-headless>=4.8,<5
+deepface>=0.0.93,<0.1
+retina-face>=0.0.14,<0.1
+tensorflow>=2.13,<2.18; platform_machine != 'arm64' or sys_platform != 'darwin'
+tensorflow-macos>=2.13,<2.16; platform_machine == 'arm64' and sys_platform == 'darwin'
